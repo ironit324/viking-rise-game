@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ragnarok Wars</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { 
+            font-family: Arial; 
+            margin: 0; 
+            padding: 20px;
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+        }
+        .building { 
+            background: #16213e; 
+            padding: 15px; 
+            margin: 10px; 
+            border-radius: 10px;
+            border: 2px solid #0f3460;
+            display: inline-block;
+            width: 200px;
+        }
+        button {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .resources {
+            background: #0f3460;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚔️ Ragnarok Wars</h1>
+    <p>Добро пожаловать, викинг!</p>
+    
+    <div class="resources">
+        <h3>💰 Ресурсы</h3>
+        <p>Золото: <span id="gold">100</span> 🪙</p>
+        <p>Дерево: <span id="wood">50</span> 🌳</p>
+        <p>Камень: <span id="stone">25</span> 🪨</p>
+    </div>
+
+    <div class="building">
+        <h3>🏠 Главный зал</h3>
+        <p>Уровень: <span id="mainHallLevel">1</span></p>
+        <button onclick="upgradeBuilding('mainHall')">Улучшить (50💰)</button>
+    </div>
+    
+    <div class="building">
+        <h3>⛏️ Шахта</h3>
+        <p>Уровень: <span id="mineLevel">1</span></p>
+        <button onclick="upgradeBuilding('mine')">Улучшить (30💰)</button>
+    </div>
+
+    <div class="building">
+        <h3>🛡️ Казармы</h3>
+        <p>Уровень: <span id="barracksLevel">1</span></p>
+        <button onclick="upgradeBuilding('barracks')">Улучшить (40💰)</button>
+    </div>
+
+    <script>
+        let resources = { gold: 100, wood: 50, stone: 25 };
+        let buildings = { mainHall: 1, mine: 1, barracks: 1 };
+
+        function upgradeBuilding(building) {
+            const costs = { mainHall: 50, mine: 30, barracks: 40 };
+            
+            if (resources.gold >= costs[building]) {
+                resources.gold -= costs[building];
+                buildings[building]++;
+                updateUI();
+                
+                if (building === 'mine') {
+                    resources.gold += 10; // Шахта дает доход
+                }
+                
+                alert(`🎉 ${getBuildingName(building)} улучшен до уровня ${buildings[building]}!`);
+            } else {
+                alert('❌ Недостаточно золота!');
+            }
+        }
+
+        function getBuildingName(building) {
+            const names = {
+                mainHall: 'Главный зал',
+                mine: 'Шахта',
+                barracks: 'Казармы'
+            };
+            return names[building];
+        }
+
+        function updateUI() {
+            document.getElementById('gold').textContent = resources.gold;
+            document.getElementById('wood').textContent = resources.wood;
+            document.getElementById('stone').textContent = resources.stone;
+            document.getElementById('mainHallLevel').textContent = buildings.mainHall;
+            document.getElementById('mineLevel').textContent = buildings.mine;
+            document.getElementById('barracksLevel').textContent = buildings.barracks;
+        }
+
+        // Инициализация Telegram Web App
+        let tg = window.Telegram.WebApp;
+        if (tg.initData) {
+            tg.expand();
+            tg.ready();
+        }
+        
+        console.log('🎮 Ragnarok Wars загружен!');
+        updateUI();
+    </script>
+</body>
+</html>
